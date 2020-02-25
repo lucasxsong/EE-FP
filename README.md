@@ -26,6 +26,8 @@ https://atmega32-avr.com/optical-microphone-and-spectrum-analyzer-using-atmega12
 
 ### working with the mic
 
+https://courses.engr.illinois.edu/phys398dlp/sp2019/documents/Electret_Microphone_Presentation.pdf
+
 https://github.com/adafruit/Adafruit-MAX4466-Electret-Mic-Amplifier-PCBs
 
 ### working with the display
