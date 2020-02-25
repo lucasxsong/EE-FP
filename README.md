@@ -1,13 +1,16 @@
 # EE-120A Final Project
 
 ## Road Map
-- [] order parts
+- [ ] order parts
   - [x] lcd
   - [x] mic
-- [] wire board
-- [] adc
-- [] fft
-- [] write to lcd
+- [ ] wire board
+  - [ ] speaker
+  - [ ] mic 
+  - [ ] nokia5110
+- [ ] adc
+- [ ] fft
+- [ ] write to lcd
   - [] output harness for lcd
 
 ## Useful links
