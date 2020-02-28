@@ -20,7 +20,8 @@ SIMAVR=simavr
 
 # Compiler
 AVR=avr-gcc
-DEBUGFLAGS=-g -Og 
+CXXFLAGS=-Wall -MMD -std=c11
+DEBUGFLAGS=-g -Og -std=c11 -Wall 
 SIMFLAGS=-D_SIMULATE_
 # Place the section past the end of reachable memory
 MMCUSECTION=-Wl,--undefined=_mmcu,--section-start=.mmcu=910000 

@@ -1,4 +1,4 @@
-# Test file for "ee-fp"
+# Test file for "noted2"
 
 
 # commands.gdb provides the following functions for ease:
