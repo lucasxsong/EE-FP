@@ -1,9 +1,8 @@
 #ifndef FFT_N
-#define FFT_N 128 /* Number of samples (64,128,256,512). */
-#endif	/* FFT_N */
-
+#define FFT_N	256		/* Number of samples (64,128,256,512). Don't forget to clean! */
 //#define INPUT_NOUSE
 //#define INPUT_IQ
+
 
 #ifndef FFFT_ASM	/* for c modules */
 
@@ -12,21 +11,20 @@ typedef struct _tag_complex_t {
 	int16_t i;
 } complex_t;
 
-
 #ifndef INPUT_NOUSE
 #ifdef INPUT_IQ
 void fft_input (const complex_t *, complex_t *);
 #else
-extern "C" { void fft_input (const int16_t *, complex_t *); }
+void fft_input (const int16_t *, complex_t *);
 #endif
 #endif
-extern "C" {
 void fft_execute (complex_t *);
-void fft_output (complex_t *, uint16_t *);
+void fft_output (const complex_t *, uint16_t *);
 int16_t fmuls_f (int16_t, int16_t);
-} 
-#include <avr/pgmspace.h>
-extern const int16_t PROGMEM tbl_window[];
+
+extern const prog_int16_t tbl_window[];
+
+
 
 #else				/* for asm module */
 
@@ -228,3 +226,4 @@ extern const int16_t PROGMEM tbl_window[];
 
 #endif	/* FFFT_ASM */
 
+#endif	/* FFT_N */
