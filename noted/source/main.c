@@ -16,17 +16,15 @@
 #include "display.h"
 #include "ffft.h"
 
-#define SAMPLES 256
+#define SAMPLES 128
 
 void ADC_init() {
 	ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
 }
 
-double vReal[SAMPLES];
-double vImag[SAMPLES];
-
-unsigned long microseconds;
-unsigned int sampling_period_us;
+int16_t capture[SAMPLES];
+complex_t bfly_buff[SAMPLES];
+uint16_t spectrum[SAMPLES/2];
 
 void setup() {
 	//set up bins
@@ -38,8 +36,7 @@ void setup() {
 void sample() {
 	for (int i = 0; i < SAMPLES; i++) {
 		// read from ADC
-		vReal[i] = ADC;
-		vImag[i] = 0;
+		capture[i] = ADC;
 	}
 }
 
@@ -54,11 +51,17 @@ int main()
 	long int x;
 	ADC_init();
 	while (1) { 
+		sample(); // fill capture buffer with data
+
+		fft_input(capture, bfly_buff); // compute samples -> complex numbers
+		//fft_execute(bfly_buff); // compute complex data
+		//fft_output(bfly_buff, spectrum);		
+
 		_delay_ms(300); 
 		N5110_clear();
 		lcd_setXY(0x40,0x80);
 
-		x = ADC;
+		x = spectrum[2];
 
 	  	char buf[40];
       		snprintf(buf, 40, "adc is %d :)", x); // puts string into buffer

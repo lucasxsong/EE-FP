@@ -10,8 +10,8 @@ PATHT=test/
 PATHH=header/
 PATHR=$(PATHB)results/
 
-SOURCES=$(wildcard $(PATHS)*.c)
-OBJS=$(patsubst $(PATHS)%,$(PATHO)%,$(SOURCES:.c=.o))
+SOURCES=$(wildcard $(PATHS)*.c $(PATHS)*.S)
+OBJS=$(patsubst $(PATHS)%,$(PATHO)%,$(SOURCES:.c=.o), $(SOURCES:.S=.o))
 
 CLEAN=rm -rf
 # Simulator
@@ -43,7 +43,7 @@ PROGRAM=avrdude
 PROGRAMMER=atmelice_isp
 MEMORY=flash
 #mem:op:file where op is (w)rite, (r)ead, (v)erify; performed in the order specified
-VERBOSITY=#-v -v ... etc. to have more verbose output. Normal output is usually enough unless something goes wrong. 
+VERBOSITY=-v#-v -v ... etc. to have more verbose output. Normal output is usually enough unless something goes wrong. 
 HIGH=hfuse
 HDEFAULT=0x99
 H120=0xD9
