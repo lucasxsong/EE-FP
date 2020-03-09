@@ -10,8 +10,8 @@ PATHT=test/
 PATHH=header/
 PATHR=$(PATHB)results/
 
-SOURCES=$(wildcard $(PATHS)*.c $(PATHS)*.S)
-OBJS=$(patsubst $(PATHS)%,$(PATHO)%,$(SOURCES:.c=.o), $(SOURCES:.S=.o))
+SOURCES=$(wildcard $(PATHS)*.c)
+OBJS=$(patsubst $(PATHS)%,$(PATHO)%,$(SOURCES:.c=.o))
 
 CLEAN=rm -rf
 # Simulator
