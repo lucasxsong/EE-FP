@@ -15,6 +15,8 @@
 
 ## Useful links
 
+https://people.ece.cornell.edu/land/courses/ece4760/FinalProjects/f2012/ajw89_bwj8/ajw89_bwj8/fft.c
+
 ### ADC, FFT, and DFT
 https://aikatz.github.io/sketch-city/labs/lab2.html
 
