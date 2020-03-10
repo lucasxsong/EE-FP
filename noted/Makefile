@@ -20,7 +20,7 @@ SIMAVR=simavr
 
 # Compiler
 AVR=avr-gcc
-CXXFLAGS=-Wall -MMD -std=c11
+CXXFLAGS=-Wall -MMD -std=c99
 DEBUGFLAGS=-g -Og -std=c11 -Wall 
 SIMFLAGS=-D_SIMULATE_
 # Place the section past the end of reachable memory
