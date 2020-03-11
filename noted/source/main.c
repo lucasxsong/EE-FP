@@ -142,6 +142,8 @@ void ADC_init() {
 	//ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
 	ADMUX = (1<<ADLAR)|(1<<REFS1)|(1<<REFS0)+0;				// Enable ADC Left Adjust Result and 2.56V Voltage Reference and ADC Port 0
 	ADCSRA = ((1<<ADEN)|(1<<ADSC))+7; 
+	adcind = 0;
+	currbin = 0;
 }
 
 ISR(TIMER1_COMPB_vect, ISR_NAKED)
@@ -153,6 +155,7 @@ ISR(TIMER1_COMPB_vect, ISR_NAKED)
 
 
 ISR (TIMER1_COMPA_vect) {
+	if (adcind < 0) { adcind = 0;}
 	if(adcind<N_WAVE) {	// if ADC buffer isn't full...
 		//store an ADC sample and start the next one
 		adcbuff[adcind++]=ADCH-140;		// subtract 140 to remove DC offset, corresponds to about 1.4V
@@ -202,15 +205,15 @@ int main()
 	  sei();
 	  set_sleep_mode(SLEEP_MODE_IDLE);
 	  sleep_enable();
-
-	int freqopt = 0;
+	
+	int freqopt = 1;
 
 	int index = 0;
 	char buf[128];
 	int j;
+	int max;
 	
-	while (1) {
-		
+	while (1) {	
 		if (1) {
 			// clear fft arrays
 			memcpy(specbuff,erasespecbuff,spectrum_bins);
@@ -232,18 +235,27 @@ int main()
 				if (freqopt==0) specbuff[(char)(i/2)]+=(char)(fftarray[i]);
 				else if (freqopt==1 && i<32) specbuff[i]+=(char)(fftarray[i]);
 			} 
+			adcind = 0;
+			currbin = 0;
 		}	
-		_delay_ms(100);
+		_delay_ms(50);
 		N5110_clear();
 		lcd_setXY(0x40,0x80);
 		index = 0;
-	  	//memset(buf, 0, 128);
-		for (j=0; j<32; j++) {
+	  	memset(buf, 0, 128);
+		for (j=2; j<32; j++) {
    			index += sprintf(&buf[index], "%d ", specbuff[j]);
 		}
-      		//snprintf(buf, 40, "%d %d %d", x, y, z); // puts string into buffer
-		
-		N5110_Data(buf);
+		max = 0;
+		for (j=2; j<32; j++) {
+   			if(specbuff[j] > max) { max = j;}
+		}
+		if (max < 5) {max = 0;}
+		x = max;
+      		snprintf(buf, 40, "max: %d", x); // puts string into buffer
+		//N5110_Data(buf);
+		N5110_Data(buf);				
+
 		
     	}
 	return 0;
