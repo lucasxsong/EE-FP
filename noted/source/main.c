@@ -246,6 +246,7 @@ int main()
 		for (j=2; j<32; j++) {
    			index += sprintf(&buf[index], "%d ", specbuff[j]);
 		}
+		N5110_Data(buf);
 		max = 0;
 		for (j=2; j<32; j++) {
    			if(specbuff[j] > max) { max = j;}
