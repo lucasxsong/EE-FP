@@ -7,7 +7,7 @@
  */
 
 
-#define F_CPU 8000000UL
+#define F_CPU 16000000UL
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -139,7 +139,9 @@ void FFTfix(int fr[], int fi[], int m)
 
 
 void ADC_init() {
-	ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
+	//ADCSRA |= (1 << ADEN) | (1 << ADSC) | (1 << ADATE);
+	ADMUX = (1<<ADLAR)|(1<<REFS1)|(1<<REFS0)+0;				// Enable ADC Left Adjust Result and 2.56V Voltage Reference and ADC Port 0
+	ADCSRA = ((1<<ADEN)|(1<<ADSC))+7; 
 }
 
 ISR(TIMER1_COMPB_vect, ISR_NAKED)
@@ -174,8 +176,10 @@ int main()
   	OCR1B = SLEEP_TIME;	// time to go to sleep
   	TIMSK1 = _BV(OCIE1B) | _BV(OCIE1A);
 
-	int x;
+	int x, y, z;
 	ADC_init();
+	adcind = 0;
+	currbin = 0;
 
 	//loop iterator
 	  int i;
@@ -198,20 +202,23 @@ int main()
 	  sei();
 	  set_sleep_mode(SLEEP_MODE_IDLE);
 	  sleep_enable();
-	
-	// sets up kiss-fft real signal to complex frequency
-	signed int adcbuff[N_WAVE];
+
+	int freqopt = 0;
+
+	int index = 0;
+	char buf[128];
+	int j;
 	
 	while (1) {
 		
-		if (adcind >= N_WAVE) {
+		if (1) {
 			// clear fft arrays
 			memcpy(specbuff,erasespecbuff,spectrum_bins);
 			memcpy(fi,erasefi,N_WAVE);
 
 			// copy adc buffer into separate array
 			memcpy(fr, adcbuff, N_WAVE);
-
+			// scale  
 			for(i=0; i<N_WAVE; i++){
 				fr[i] = multfix((fr[i]<<4),adcMask[i]);
 			}
@@ -224,19 +231,20 @@ int main()
 				//store values into 32 frequency bins depending on overall frequency 
 				if (freqopt==0) specbuff[(char)(i/2)]+=(char)(fftarray[i]);
 				else if (freqopt==1 && i<32) specbuff[i]+=(char)(fftarray[i]);
-				}
-			
+			} 
 		}	
-		_delay_ms(300); 
+		_delay_ms(100);
 		N5110_clear();
 		lcd_setXY(0x40,0x80);
-
-		x = adcbuff[2];
-
-	  	char buf[40];
-      		snprintf(buf, 40, "adc is %d :)", x); // puts string into buffer
+		index = 0;
+	  	//memset(buf, 0, 128);
+		for (j=0; j<32; j++) {
+   			index += sprintf(&buf[index], "%d ", specbuff[j]);
+		}
+      		//snprintf(buf, 40, "%d %d %d", x, y, z); // puts string into buffer
 		
 		N5110_Data(buf);
+		
     	}
 	return 0;
 }
