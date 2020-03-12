@@ -214,7 +214,7 @@ void tick() {
 			index = 0;
 			lcd_setXY(0x40,0x80);
 		  	memset(buf, 0, 128);
-			strcpy(buf, allMode);
+			
 			for (j=3; j<32; j++) {
 	   			index += sprintf(&buf[index], "%d ", specbuff[j]);
 			}
@@ -233,13 +233,13 @@ void tick() {
 			l = 0;
 			m = 0;
 			h = 0;
-			for (j = 3; j < 13; j++) {
+			for (j = 3; j < 8; j++) {
 				l+= specbuff[j];
 			}
-			for (j = 13; j < 23; j++) {
+			for (j = 8; j < 13; j++) {
 				m+= specbuff[j];
 			}
-			for (j = 23; j < 32; j++) {
+			for (j = 13; j < 18; j++) {
 				h+= specbuff[j];
 			}
 			
